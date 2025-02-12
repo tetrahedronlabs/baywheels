@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://tetrahedron-ver4cq.us-west-2.xata.sh/db/baywheels",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
