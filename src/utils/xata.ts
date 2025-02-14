@@ -163,6 +163,142 @@ const tables = [
       },
     ],
   },
+  {
+    name: "stations",
+    checkConstraints: {
+      stations_xata_id_length_xata_id: {
+        name: "stations_xata_id_length_xata_id",
+        columns: ["xata_id"],
+        definition: "CHECK ((length(xata_id) < 256))",
+      },
+    },
+    foreignKeys: {},
+    primaryKey: [],
+    uniqueConstraints: {
+      _pgroll_new_stations_xata_id_key: {
+        name: "_pgroll_new_stations_xata_id_key",
+        columns: ["xata_id"],
+      },
+      stations_station_id_unique: {
+        name: "stations_station_id_unique",
+        columns: ["station_id"],
+      },
+    },
+    columns: [
+      {
+        name: "address",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "capacity",
+        type: "int",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "lat",
+        type: "float",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "lon",
+        type: "float",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "name",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "region_id",
+        type: "int",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "rental_uris/android",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "rental_uris/ios",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "short_name",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "station_id",
+        type: "text",
+        notNull: false,
+        unique: true,
+        defaultValue: null,
+        comment: "{}",
+      },
+      {
+        name: "xata_createdat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_id",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
+        comment: "",
+      },
+      {
+        name: "xata_updatedat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_version",
+        type: "int",
+        notNull: true,
+        unique: false,
+        defaultValue: "0",
+        comment: "",
+      },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -171,8 +307,12 @@ export type InferredTypes = SchemaInference<SchemaTables>;
 export type Rides = InferredTypes["rides"];
 export type RidesRecord = Rides & XataRecord;
 
+export type Stations = InferredTypes["stations"];
+export type StationsRecord = Stations & XataRecord;
+
 export type DatabaseSchema = {
   rides: RidesRecord;
+  stations: StationsRecord;
 };
 
 const DatabaseClient = buildClient();
