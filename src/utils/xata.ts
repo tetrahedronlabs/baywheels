@@ -10,6 +10,11 @@ const tables = [
   {
     name: "rides",
     checkConstraints: {
+      _pgroll_check_not_null_member_casual: {
+        name: "_pgroll_check_not_null_member_casual",
+        columns: ["_pgroll_new_member_casual"],
+        definition: "CHECK ((_pgroll_new_member_casual IS NOT NULL)) NOT VALID",
+      },
       tripdata_xata_id_length_xata_id: {
         name: "tripdata_xata_id_length_xata_id",
         columns: ["xata_id"],
@@ -25,6 +30,14 @@ const tables = [
       },
     },
     columns: [
+      {
+        name: "_pgroll_new_member_casual",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "{}",
+      },
       {
         name: "end_lat",
         type: "float",

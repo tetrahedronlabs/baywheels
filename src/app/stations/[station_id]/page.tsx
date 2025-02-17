@@ -1,3 +1,4 @@
+import { Card, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { database } from "@/src/utils/database";
 import { notFound } from "next/navigation";
 
@@ -10,15 +11,14 @@ export default async function Page(props: {
     .getFirst();
   if (!station) return notFound();
   return (
-    <div>
-      <h1>Station Details</h1>
-      <p>Station Short Code: {params.station_id}</p>
-      <p>Station Name: {station.name}</p>
-      <p>Station Capacity: {station.capacity}</p>
-      <p>
-        Station Location: {station.lat}, {station.lon}
-      </p>
-      <p>Station ID:{station.station_id}</p>
+    <div className="mx-auto max-w-screen-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Trip Route</CardTitle>
+          </CardHeader>
+        </Card>
+      </div>
     </div>
   );
 }
