@@ -17,6 +17,9 @@ export default async function Page(props: {
           <CardHeader>
             <CardTitle>Trip Route</CardTitle>
           </CardHeader>
+          <p>{station.address}</p>
+          <p>{station.capacity}</p>
+          <p>{station.region_id}</p>
         </Card>
       </div>
     </div>

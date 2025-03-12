@@ -1,3 +1,4 @@
+import RideMap from "@/src/components/map";
 import { Badge } from "@/src/components/ui/badge";
 import {
   Card,
@@ -5,25 +6,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
-import { database } from "@/src/utils/database";
-import { Bike, Calendar, Clock, User } from "lucide-react";
+import { Bike, Calendar, Clock, User, Zap } from "lucide-react";
 import { notFound } from "next/navigation";
+import { getRideById } from "@/src/utils/ride";
 
 export default async function Page(props: {
   params: Promise<{ ride_id: string }>;
 }) {
   const params = await props.params;
-  const ride = await database.db.rides
-    .filter("ride_id", params.ride_id)
-    .getFirst();
+  const ride = await getRideById(params.ride_id);
+
   if (!ride) return notFound();
+
   return (
-    <div className="mx-auto max-w-screen-xl">
+    <div className="mx-auto flex h-screen max-w-screen-xl items-center justify-center">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Route</CardTitle>
-          </CardHeader>
+          <RideMap
+            startStation={{
+              latitude: ride.start_lat!,
+              longitude: ride.start_lng!,
+            }}
+            endStation={{
+              latitude: ride.end_lat!,
+              longitude: ride.end_lng!,
+            }}
+          />
         </Card>
         <Card className="col-span-1">
           <CardHeader>
@@ -40,7 +48,11 @@ export default async function Page(props: {
                       ? "default"
                       : "secondary"
                   }
+                  className="flex items-center gap-1"
                 >
+                  {ride.rideable_type === "electric_bike" && (
+                    <Zap className="h-3 w-3" />
+                  )}
                   {ride.rideable_type === "electric_bike"
                     ? "Electric Bike"
                     : "Classic Bike"}

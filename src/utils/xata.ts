@@ -10,13 +10,8 @@ const tables = [
   {
     name: "rides",
     checkConstraints: {
-      _pgroll_check_not_null_member_casual: {
-        name: "_pgroll_check_not_null_member_casual",
-        columns: ["_pgroll_new_member_casual"],
-        definition: "CHECK ((_pgroll_new_member_casual IS NOT NULL)) NOT VALID",
-      },
-      tripdata_xata_id_length_xata_id: {
-        name: "tripdata_xata_id_length_xata_id",
+      rides_xata_id_length_xata_id: {
+        name: "rides_xata_id_length_xata_id",
         columns: ["xata_id"],
         definition: "CHECK ((length(xata_id) < 256))",
       },
@@ -24,20 +19,12 @@ const tables = [
     foreignKeys: {},
     primaryKey: [],
     uniqueConstraints: {
-      _pgroll_new_tripdata_xata_id_key: {
-        name: "_pgroll_new_tripdata_xata_id_key",
+      _pgroll_new_rides_xata_id_key: {
+        name: "_pgroll_new_rides_xata_id_key",
         columns: ["xata_id"],
       },
     },
     columns: [
-      {
-        name: "_pgroll_new_member_casual",
-        type: "text",
-        notNull: false,
-        unique: false,
-        defaultValue: null,
-        comment: "{}",
-      },
       {
         name: "end_lat",
         type: "float",
@@ -192,10 +179,6 @@ const tables = [
         name: "_pgroll_new_stations_xata_id_key",
         columns: ["xata_id"],
       },
-      stations_station_id_unique: {
-        name: "stations_station_id_unique",
-        columns: ["station_id"],
-      },
     },
     columns: [
       {
@@ -274,7 +257,7 @@ const tables = [
         name: "station_id",
         type: "text",
         notNull: false,
-        unique: true,
+        unique: false,
         defaultValue: null,
         comment: "{}",
       },
