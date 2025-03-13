@@ -1,38 +1,37 @@
 {
-  "name": "baywheels",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/mapbox-gl": "^3.4.1",
-    "@xata.io/client": "^0.0.0-next.v93343b9646f57a1e5c51c35eccf0767c2bb80baa",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.475.0",
-    "mapbox-gl": "^3.10.0",
-    "next": "15.1.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-map-gl": "^8.0.1",
-    "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20.17.22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.7",
-    "postcss": "^8",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.7.3"
-  }
+	"name": "baywheels",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"deploy": "opennextjs-cloudflare && wrangler deploy",
+		"preview": "opennextjs-cloudflare && wrangler dev",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+		"drizzle:generate": "drizzle-kit generate",
+		"drizzle:migrate": "drizzle-kit migrate",
+		"drizzle:dev": "drizzle-kit studio"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.40.0",
+		"next": "14.2.24",
+		"react": "^18",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250311.0",
+		"@opennextjs/cloudflare": "^0.5.10",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"drizzle-kit": "^0.30.5",
+		"eslint": "^8",
+		"eslint-config-next": "14.2.24",
+		"postcss": "^8",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5",
+		"wrangler": "^3.114.1"
+	}
 }
