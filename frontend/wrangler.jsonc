@@ -5,27 +5,14 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "baywheels",
-	"main": ".open-next/worker.js",
-	"compatibility_date": "2024-09-26",
+	"compatibility_date": "2025-03-17",
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
-	"minify": true,
-	"assets": {
-		"binding": "ASSETS",
-		"directory": ".open-next/assets"
-	},
+	"pages_build_output_dir": ".vercel/output/static",
 	"observability": {
 		"enabled": true
-	},
-	"d1_databases": [
-    {
-      "binding": "db",
-      "database_name": "baywheels",
-      "database_id": "2790832d-6462-41cc-b7e5-0cd9674b9d47",
-	  "migrations_dir": "drizzle/migrations"
-    }
-  ]
+	}
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
