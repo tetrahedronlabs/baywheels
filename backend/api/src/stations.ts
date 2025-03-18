@@ -1,10 +1,9 @@
 import { drizzle } from "drizzle-orm/d1";
 import { stations } from "../drizzle/schema";
-import { InferSelectModel } from "drizzle-orm";
+import { InferSelectModel, eq } from "drizzle-orm";
 
 // API source URL (Replace with actual endpoint)
-const STATIONS_API_URL =
-  "https://gbfs.lyft.com/gbfs/2.3/bay/en/station_information.json";
+const STATIONS_API_URL = "https://gbfs.lyft.com/gbfs/2.3/bay/en/station_information.json";
 
 // Infer TypeScript type from Drizzle schema
 export type Station = InferSelectModel<typeof stations>;
@@ -17,12 +16,8 @@ export type APIStation = {
   lat: number;
   lon: number;
   capacity: number;
-  region_id?: string; // Comes as a string from API, needs conversion
-  address?: string; // Some may have an address, others may not
-  rental_uris: {
-    ios: string;
-    android: string;
-  };
+  region_id?: string;
+  address?: string;
 };
 
 // Function to fetch and upsert stations into the database
@@ -32,38 +27,57 @@ export async function updateStations(env: CloudflareBindings) {
   try {
     // Fetch station data from API
     const response = await fetch(STATIONS_API_URL);
-    if (!response.ok)
-      throw new Error(`Failed to fetch stations: ${response.statusText}`);
+    if (!response.ok) throw new Error(`Failed to fetch stations: ${response.statusText}`);
 
-    const jsonData: { data: { stations: APIStation[] } } =
-      await response.json();
+    const jsonData: { data: { stations: APIStation[] } } = await response.json();
     const stationList: APIStation[] = jsonData.data.stations;
 
-    if (!Array.isArray(stationList))
-      throw new Error("Invalid station data format");
+    if (!Array.isArray(stationList)) throw new Error("Invalid station data format");
 
-    console.log(`Fetched ${stationList.length} stations from Lyft`);
+    console.log(`Fetched ${stationList.length} stations from the Lyft API`);
 
-    // Convert API data and upsert
     for (const station of stationList) {
-      const dbStation: Station = {
+      const existing = await db
+        .select()
+        .from(stations)
+        .where(eq(stations.station_id, station.station_id))
+        .get();
+
+      const newStation: Station = {
         short_name: station.short_name,
         name: station.name,
         station_id: station.station_id,
         lat: station.lat,
         lon: station.lon,
         capacity: station.capacity,
-        region_id: station.region_id ? parseInt(station.region_id) : null, // Convert region_id to number
-        address: station.address ?? null, // Use address if available, otherwise null
+        region_id: station.region_id ? parseInt(station.region_id) : null,
+        address: station.address ?? null,
       };
 
-      await db.insert(stations).values(dbStation).onConflictDoUpdate({
-        target: stations.station_id, // Conflict resolution on station_id
-        set: dbStation,
-      });
+      if (!existing) {
+        // Insert only if the station is new
+        await db.insert(stations).values(newStation);
+        console.log(`Inserted new station: ${station.short_name}`);
+      } else {
+        // Check if data has changed
+        const hasChanged = Object.keys(newStation).some((key) => {
+          return newStation[key as keyof Station] !== existing[key as keyof Station];
+        });
+
+        if (hasChanged) {
+          // Update only if something has changed
+          await db
+            .update(stations)
+            .set(newStation)
+            .where(eq(stations.station_id, station.station_id));
+          console.log(`Updated station: ${station.short_name}`);
+        } else {
+          console.log(`No changes for station: ${station.short_name}`);
+        }
+      }
     }
 
-    console.log("Stations updated successfully");
+    console.log("Station update process completed.");
   } catch (error) {
     console.error("Error updating stations:", error);
   }
