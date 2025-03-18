@@ -33,4 +33,18 @@ app.get("/stations", async (c) => {
   return c.json(result);
 });
 
+app.get("/stations/:id", async (c) => {
+  const db = drizzle(c.env.DB);
+  const id = c.req.param("id");
+  const result = await db
+    .select()
+    .from(stations)
+    .where(eq(stations.short_name, id))
+    .get();
+  if (!result) {
+    return c.json({ error: "Station not found" }, 404);
+  }
+  return c.json(result);
+});
+
 export default app;
