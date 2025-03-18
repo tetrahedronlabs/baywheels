@@ -51,7 +51,7 @@ app.get("/stations/:id", async (c) => {
 export default {
   fetch: app.fetch,
   async scheduled(event: ScheduledEvent, env: CloudflareBindings) {
-    if (event.cron === "* * * * *") {
+    if (event.cron === "0 0 * * *") {
       await updateStations(env);
     }
   },

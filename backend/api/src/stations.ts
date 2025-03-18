@@ -42,7 +42,7 @@ export async function updateStations(env: CloudflareBindings) {
     if (!Array.isArray(stationList))
       throw new Error("Invalid station data format");
 
-    console.log(`Fetched ${stationList.length} stations from API`);
+    console.log(`Fetched ${stationList.length} stations from Lyft`);
 
     // Convert API data and upsert
     for (const station of stationList) {
@@ -63,8 +63,8 @@ export async function updateStations(env: CloudflareBindings) {
       });
     }
 
-    console.log("Stations upserted successfully");
+    console.log("Stations updated successfully");
   } catch (error) {
-    console.error("Error upserting stations:", error);
+    console.error("Error updating stations:", error);
   }
 }
