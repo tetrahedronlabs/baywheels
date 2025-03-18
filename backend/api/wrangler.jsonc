@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "api",
+	"name": "baywheels-api",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-03-17",
 	"compatibility_flags": ["nodejs_compat"],
