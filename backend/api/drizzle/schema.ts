@@ -19,7 +19,7 @@ export const rides = sqliteTable("rides", {
 export const stations = sqliteTable("stations", {
   short_name: text(),
   name: text().notNull(),
-  station_id: integer().primaryKey(),
+  station_id: text().primaryKey(),
   lat: real().notNull(),
   lon: real().notNull(),
   capacity: integer().notNull(),
