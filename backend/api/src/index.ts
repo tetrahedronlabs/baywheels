@@ -2,6 +2,7 @@ import { rides, stations } from "../drizzle/schema";
 import { drizzle } from "drizzle-orm/d1";
 import { Hono } from "hono";
 import { eq } from "drizzle-orm";
+import { updateStations } from "./stations";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -47,4 +48,11 @@ app.get("/stations/:id", async (c) => {
   return c.json(result);
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledEvent, env: CloudflareBindings) {
+    if (event.cron === "* * * * *") {
+      await updateStations(env);
+    }
+  },
+};
