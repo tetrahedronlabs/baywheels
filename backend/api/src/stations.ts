@@ -3,7 +3,8 @@ import { stations } from "../drizzle/schema";
 import { InferSelectModel, eq } from "drizzle-orm";
 
 // API source URL (Replace with actual endpoint)
-const STATIONS_API_URL = "https://gbfs.lyft.com/gbfs/2.3/bay/en/station_information.json";
+const STATIONS_API_URL =
+  "https://gbfs.lyft.com/gbfs/2.3/bay/en/station_information.json";
 
 // Infer TypeScript type from Drizzle schema
 export type Station = InferSelectModel<typeof stations>;
@@ -27,12 +28,15 @@ export async function updateStations(env: CloudflareBindings) {
   try {
     // Fetch station data from API
     const response = await fetch(STATIONS_API_URL);
-    if (!response.ok) throw new Error(`Failed to fetch stations: ${response.statusText}`);
+    if (!response.ok)
+      throw new Error(`Failed to fetch stations: ${response.statusText}`);
 
-    const jsonData: { data: { stations: APIStation[] } } = await response.json();
+    const jsonData: { data: { stations: APIStation[] } } =
+      await response.json();
     const stationList: APIStation[] = jsonData.data.stations;
 
-    if (!Array.isArray(stationList)) throw new Error("Invalid station data format");
+    if (!Array.isArray(stationList))
+      throw new Error("Invalid station data format");
 
     console.log(`Fetched ${stationList.length} stations from the Lyft API`);
 
@@ -61,7 +65,9 @@ export async function updateStations(env: CloudflareBindings) {
       } else {
         // Check if data has changed
         const hasChanged = Object.keys(newStation).some((key) => {
-          return newStation[key as keyof Station] !== existing[key as keyof Station];
+          return (
+            newStation[key as keyof Station] !== existing[key as keyof Station]
+          );
         });
 
         if (hasChanged) {
